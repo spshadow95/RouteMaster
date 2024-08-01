@@ -1,0 +1,79 @@
+const pq = new MinPriorityQueue();
+    for (let i = 0; i < vehicleCount; i++) {
+      pq.enqueue([0, 0, i + 1]);
+    }
+    const dist = Array.from({ length: coordinates.length }, (_, i) => 1e9);
+    const path = Array.from({ length: coordinates.length }, (_, i) => 0);
+    const vis = Array.from({ length: coordinates.length }, (_, i) => 0);
+    dist[0] = 0;
+    while (!pq.isEmpty()) {
+      const t = pq.front();
+      const d = t[0];
+      const i = t[1];
+      const p = t[2];
+      console.log(d, i, p);
+      pq.dequeue();
+      let mindist = 1e9;
+      let minj = 0;
+      for (let j = 0; j < coordinates.length; j++) {
+        if (matrix[i][j] + d + matrix[j][0] < mindist && matrix[i][j] + d + matrix[j][0] < dist[j] + dist[i] && i != j) {
+          mindist = matrix[i][j] + d + matrix[j][0];
+          minj = j;
+        }
+      }
+      if (minj != 0) {
+        dist[minj] = mindist;
+        path[minj] = p;
+        pq.enqueue([mindist, minj, p]);
+      }
+    }
+    const distvehicleMappig = new Array(coordinates.length);
+    for (let i = 0; i < coordinates.length; i++) {
+      distvehicleMappig[i] = [dist[i], path[i], coordinates[i][0], coordinates[i][1]];
+      console.log(distvehicleMappig)
+    }
+    distvehicleMappig.sort();
+
+
+    Directions code ->
+    const handleclick = async () => {
+    if (startcoord != [] && destcoord != []) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", `https://api.mapbox.com/directions/v5/mapbox/driving/${startcoord[0]},${startcoord[1]};${destcoord[0]},${destcoord[1]}?steps=true&geometries=geojson&access_token=${accessToken}`, false);
+      xhr.send();
+      var data = JSON.parse(xhr.responseText);
+      const route = data.routes[0].geometry.coordinates;
+      const geojson = {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: route
+        }
+      };
+      if (mapInstanceRef.current.getSource('route')) {
+        mapInstanceRef.current.getSource('route').setData(geojson);
+      }
+      else if (geojson) {
+        mapInstanceRef.current.addLayer({
+          id: 'route',
+          type: 'line',
+          source: {
+            type: 'geojson',
+            data: geojson
+          },
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            'line-color': '#3887be',
+            'line-width': 5,
+            'line-opacity': 0.75
+          }
+        });
+      }
+      console.log(data);
+
+    }
+  }

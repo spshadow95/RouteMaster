@@ -1,0 +1,24 @@
+ul {
+    display: flex;
+    align-items: center;
+    gap:10vw;
+    margin-right: 2vw;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: darkgrey;
+}
+.logo {
+    margin-left: 2vw;
+}
+.map-container {
+    padding-top:2vh;
+    height: 90vh;
+}
+form{
+    width: 30vw;
+    padding: 0.5vw;
+    
+}
+
